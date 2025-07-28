@@ -12,6 +12,7 @@ import Product from "./pages/Product";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
+import { Bounce, ToastContainer } from "react-toastify";
 const App = () => {
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
@@ -29,6 +30,19 @@ const App = () => {
         <Route path="/product/:productId" element={<Product />} />
       </Routes>
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
 };

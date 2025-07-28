@@ -8,7 +8,7 @@ import RelatedProduct from "../components/RelatedProduct";
 const Product = () => {
   const { currency } = UseShop();
   const { productId } = useParams();
-  const { products } = UseShop();
+  const { products, addToCart } = UseShop();
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
@@ -80,7 +80,10 @@ const Product = () => {
               ))}
             </div>
           </div>
-          <button className="bg-black text-white text-sm px-8 py-3 active:bg-gray-700 cursor-pointer hover:bg-transparent hover:text-black border hover:border-black transition-all">
+          <button
+            onClick={() => addToCart(productData._id, size)}
+            className="bg-black text-white text-sm px-8 py-3 active:bg-gray-700 cursor-pointer hover:bg-transparent hover:text-black border hover:border-black transition-all"
+          >
             ADD TO CART
           </button>
           <hr className="mt-8 sm:w-4/5" />

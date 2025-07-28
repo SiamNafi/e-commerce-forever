@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 import UseShop from "../utils/UseShop";
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch } = UseShop();
+  const { setShowSearch, getCartCount } = UseShop();
   return (
     <div className="flex items-center justify-between py-5 font-medium">
       {/* logo */}
@@ -57,7 +57,7 @@ const Navbar = () => {
         <Link to="/cart" className="relative">
           <img src={assets.cart_icon} alt="" className="w-5 min-w-5" />
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white rounded-full aspect-square text-[8px]">
-            10
+            {getCartCount()}
           </p>
         </Link>
         {/* mobile menu icon */}
