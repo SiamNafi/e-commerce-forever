@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(null);
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
@@ -18,6 +20,7 @@ const AdminLogin = ({ setToken }) => {
       if (res.data.success) {
         setToken(res.data.token);
         toast.success("Admin Login Successfull");
+        navigate("/add");
       } else {
         toast.error(res.data.message);
       }
