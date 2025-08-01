@@ -8,6 +8,7 @@ import Orders from "./pages/Orders";
 import AdminLogin from "./components/AdminLogin";
 import { Bounce, ToastContainer } from "react-toastify";
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
+export const currency = "$";
 const App = () => {
   const [token, setToken] = useState(
     localStorage.getItem("token") ? localStorage.getItem("token") : ""
