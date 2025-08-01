@@ -5,6 +5,7 @@ import { connect } from "./config/dbConnect.js";
 import connectCloudinary from "./config/cloudinary.js";
 import userRouter from "./routes/userRoute.js";
 import productRouter from "./routes/productRoute.js";
+import cartRouter from "./routes/cartRoute.js";
 
 //app config
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors());
 // api end points
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
+app.use("/api/cart", cartRouter);
 app.get("/", (req, res) => {
   res.send("Forever server is running");
 });

@@ -1,15 +1,20 @@
 import { createContext, useEffect, useState } from "react";
-import { products } from "../assets/assets";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 export const ShopContext = createContext();
 
 export const ShopContextProver = ({ children }) => {
   const currency = "$";
   const delivary_fee = 10;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
+  const [products, setProducts] = useState([]);
+  const [token, setToken] = useState(
+    localStorage.getItem("token") ? localStorage.getItem("token") : ""
+  );
   const navigate = useNavigate();
 
   const addToCart = async (itemId, size) => {
@@ -28,6 +33,7 @@ export const ShopContextProver = ({ children }) => {
       cartData[itemId] = {};
       cartData[itemId][size] = 1;
     }
+    toast.success("Product Added To Cart");
     setCartItems(cartData);
   };
 
@@ -71,6 +77,23 @@ export const ShopContextProver = ({ children }) => {
     return totalAmount;
   };
 
+  const getProductData = async () => {
+    try {
+      const res = await axios.get(backendUrl + "/api/product/list");
+      if (res.data.success) {
+        setProducts(res.data.products);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log("error fetcing all product", error.message);
+      toast.error(error.message);
+    }
+  };
+  useEffect(() => {
+    getProductData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const value = {
     products,
     currency,
@@ -85,6 +108,9 @@ export const ShopContextProver = ({ children }) => {
     updateQuantity,
     getCartAmount,
     navigate,
+    backendUrl,
+    token,
+    setToken,
   };
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
 };
