@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +20,10 @@ export const ShopContextProver = ({ children }) => {
   const navigate = useNavigate();
 
   const addToCart = async (itemId, size) => {
+    if (!token) {
+      toast.info("Please Login first.");
+      navigate("/login");
+    }
     if (!size) {
       toast.error("Select Product Size");
       return;
@@ -33,8 +39,22 @@ export const ShopContextProver = ({ children }) => {
       cartData[itemId] = {};
       cartData[itemId][size] = 1;
     }
-    toast.success("Product Added To Cart");
     setCartItems(cartData);
+    if (token) {
+      try {
+        const res = await axios.post(
+          backendUrl + "/api/cart/add",
+          { itemId, size },
+          { headers: { token } }
+        );
+        if (res.data.success) {
+          toast.success("Product Added To Cart");
+        }
+      } catch (error) {
+        console.log("Error in addtocart frontend", error.message);
+        toast.error(error.message);
+      }
+    }
   };
 
   const getCartCount = () => {
@@ -58,6 +78,22 @@ export const ShopContextProver = ({ children }) => {
     cartData[itemId][size] = quantity;
 
     setCartItems(cartData);
+    if (token) {
+      try {
+        await axios.post(
+          backendUrl + "/api/cart/update",
+          {
+            itemId,
+            size,
+            quantity,
+          },
+          { headers: { token } }
+        );
+      } catch (error) {
+        console.log("Error in updateQuanity frontend", error.message);
+        toast.error(error.message);
+      }
+    }
   };
 
   const getCartAmount = () => {
@@ -67,7 +103,7 @@ export const ShopContextProver = ({ children }) => {
       for (const item in cartItems[items]) {
         try {
           if (cartItems[items][item] > 0) {
-            totalAmount += itemInfo.price * cartItems[items][item];
+            totalAmount += itemInfo?.price * cartItems[items][item];
           }
         } catch (error) {
           console.log(error);
@@ -90,10 +126,31 @@ export const ShopContextProver = ({ children }) => {
       toast.error(error.message);
     }
   };
+
+  const getUserCart = async (token) => {
+    try {
+      const res = await axios.post(
+        backendUrl + "/api/cart/get",
+        {},
+        { headers: { token } }
+      );
+      if (res.data.success) {
+        setCartItems(res.data.cartData);
+      }
+    } catch (error) {
+      console.log("error in getusercart", error.message);
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getProductData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (token && localStorage.getItem("token")) {
+      getUserCart(localStorage.getItem("token"));
+    }
+  }, [token]);
   const value = {
     products,
     currency,
@@ -111,6 +168,7 @@ export const ShopContextProver = ({ children }) => {
     backendUrl,
     token,
     setToken,
+    setCartItems,
   };
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
 };

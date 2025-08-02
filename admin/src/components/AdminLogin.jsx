@@ -20,7 +20,7 @@ const AdminLogin = ({ setToken }) => {
       if (res.data.success) {
         setToken(res.data.token);
         toast.success("Admin Login Successfull");
-        navigate("/add");
+        navigate("/");
       } else {
         toast.error(res.data.message);
       }

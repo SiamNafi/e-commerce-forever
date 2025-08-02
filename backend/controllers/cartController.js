@@ -45,8 +45,8 @@ const getUserCart = async (req, res) => {
   try {
     const { userId } = req.body;
     const userData = await userModel.findById(userId);
-    let cartdata = await userData.cartData;
-    res.json({ success: true, cartdata });
+    let cartData = await userData.cartData;
+    res.json({ success: true, cartData });
   } catch (error) {
     console.log("Erro in get user cart controller", error.message);
     res.json({ success: false, message: error.message });
