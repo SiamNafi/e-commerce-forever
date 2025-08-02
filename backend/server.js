@@ -11,6 +11,7 @@ import orderRouter from "./routes/orderRoute.js";
 //app config
 const app = express();
 const port = process.env.PORT || 5000;
+connect();
 
 //middlewares
 app.use(express.json());
@@ -28,6 +29,5 @@ app.get("/", (req, res) => {
 // starting the server
 app.listen(port, () => {
   console.log(`server is running on : ${port}`);
-  connect();
   connectCloudinary();
 });
