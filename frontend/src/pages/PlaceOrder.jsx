@@ -13,7 +13,6 @@ const PlaceOrder = () => {
     navigate,
     backendUrl,
     token,
-    setToken,
     cartItems,
     setCartItems,
     getCartAmount,
